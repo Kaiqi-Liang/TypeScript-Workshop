@@ -1,61 +1,64 @@
 # TypeScript Workshop
 ## JavaScript Concepts
-JavaScript is a dynamically typed language.
+JavaScript is a dynamically typed language
 
-You can change the type of a variable or add new properties or methods to an object after it's been declared.
+You can change the type of a variable or add new properties or methods to an object after it's been declared
 
-Basically you can think of every varible in JavaScript as of type `any`.
+Basically you can think of every variable in JavaScript as of type `any`
 
-You can only see JavaScript errors when you run it, for example typos and redeclaring a `const` variable, the former will just give you an `undefined` if you misspelt a varible name that doesn't exist, the latter will crash horribly and yell at you. 😫 
+You can only see JavaScript errors when you run it, for example typos and redeclaring a `const` variable, the former will just give you an `undefined` if you misspelt a field name that doesn't exist in an `object`, the latter will crash horribly and yell at you 😫
 
 ## JavaScript Types
 ### Some common Primitives
 * `number`
-> includes both int and float
+> includes both `int` and `float`
 * `string`
-> includes char (a string with 1 character in it)
+> includes `char` (a string with a single character in it)
 * `boolean`
-> true/false
+> `true` or `false`
 * `null`
 > a lot of functions return null to indicate it failed or something that you tried to get doesn't exist
 ```javascript
 localStorage.getItem('');
 ```
 * `undefined`
-> when you try to access a field in an object that doesn't exist, or an array with an index out of range, try to avoid it in TypeScript
+> when you try to access a field in an object that doesn't exist, or an element in an array with an index out of range, this is what we are trying to avoid in TypeScript
 
 ## TypeScript Concepts
-TypeScript is a superset of JavaScript, it allows you to add static typing.
+TypeScript is a superset of JavaScript, it allows you to add static typing
 
-TypeScript gets transpiled to JavaScript so that it can be run on either the browser or `node.js`.
+TypeScript gets transpiled to Vanilla JavaScript so that it can be run on either the browsers or `node.js`. You can specify the version of JavaScript that it transpiles into which allows you to use `tsc` purely as a transpiler for browser compatibility (not what TypeScript is built for and definitely not as good as `babel` but it's another perk that's worth mentioning)
 
 ### Type Inference
-You don't have to annoatate types for every single variable to utilise TypeScript's static typing feature.
+You don't have to `annoatate` types for every single variable to utilise TypeScript's static typing feature
 
-In fact if you get nothing out of today's workshop you can still start flexing that you know TypeScript by just writing Vanilla JavaScript in a `ts` file and purely relies on `Type Inference` to give you the static typing ability. 😜
+In fact if you get nothing out of today's workshop you can still start flexing that you know TypeScript by just writing Vanilla JavaScript in a `ts` file and purely relies on `Type Inference` to give you the static typing ability 😜
 
 ## TypeScript Types
 ### Basic Types
 #### JavaScript Primitives
-They all have the same names as what `typeof` in JavaScript returns.
+They all have the same names as what `typeof` in JavaScript returns
 ```typescript
-let num: number = 42;
+let num = 42;
 num = 0; // no error
 // num = '0'; // error
+
+let bool: boolean = true;
+bool = false; // no error
+// bool = 0; // error
 ```
 
-#### any
-You can think of all the variables in Vanilla JavaScript are of type `any`.
+#### Any
 ```typescript
 let num: any = 42;
 num = '0'; // no error
 ```
-When you don’t specify a type, and TypeScript can’t `infer` it from context, the compiler will typically default to `any`.
+When you don’t specify a type, and TypeScript can’t `infer` it from context, the compiler will typically default to `any`
 ```typescript
-const add = (a, b) => a + b;
+const add = (a, b) => a + b; // const add: (a: any, b: any) => any
 ```
 
-#### never
+#### Never
 ```typescript
 let never: never;
 /* whatever you try to assign to this type it won't work
@@ -68,6 +71,7 @@ none = null;
 
 #### Array
 ```typescript
+// let numbers: number[] = ['0']; // error
 let numbers: number[] = [];
 numbers = [1, 2]; // no error
 // numbers = [1, '2']; // error
@@ -75,6 +79,7 @@ numbers = [1, 2]; // no error
 ```
 
 #### Function
+`Parameter Type Annotations` is where TypeScript is most frequently utilised because it is mandotary. Much like variable type annotations, you usually don’t need a return type annotation because TypeScript will `infer` the function’s return type based on its `return` statements
 ```typescript
 /**
  * `Type Inference`
@@ -83,7 +88,7 @@ numbers = [1, 2]; // no error
  * The return value of the function is `inferred`.
  */
 const add = (a: number, b: number) => a + b;
-const res: number = add(1, 2); // no error
+const res = add(1, 2); // no error
 // add('1', 2); // error
 // add(1); // error
 ```
@@ -166,6 +171,9 @@ let renderProps: RenderProps = { render: false };
 
 Union and Intersection can also be constructed with values
 ```typescript
+// let bool: boolean;
+// type boolean = true | false;
+
 type Bit = 0 | 1;
 let bit: Bit = 1;
 bit = 0;
@@ -174,23 +182,24 @@ type Hex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 'A' | 'B' | 'C' | 'D' | 'E' |
 type or = Bit | Hex;
 type and = Bit & Hex;
 ```
+As you can see Union is more commonly used for primitive types to build up more complex types while Intersection is used for complex types and interfaces to build up more restrictive types
 
 #### Anonymous
 ```typescript
 type Input = (number | string)[];
 // type Input = Data[]
-let inputs: Input = [];
-inputs = [0];
+const inputs: Input = ['0'];
 inputs.push(1);
-inputs.push('2');
+inputs.unshift('2');
+// inputs.indexOf(true); // error
 
-type Objects = { value: number; }[]
+type Objects = { value: number }[]
 let objects: Objects = [];
 objects.push({ value: 0 }); // no error
 // objects.push(0); // error
 ```
 
-#### Generics
+### Generics
 ```typescript
 let strings: Array<string> = ['1', '2'];
 strings[0] = '';
@@ -209,7 +218,7 @@ const useState: State<number> = {
 }
 ```
 
-#### Class
+### Class
 ```typescript
 class LinkedList {
     private value: number;
@@ -290,7 +299,7 @@ interface Interface<T> {
 }
 ```
 What's the difference?
-> No difference here but the convention is to use interface to define data shapes, for example, an object. Below are some of the features that one might have but not the other.
+> No difference here but the convention is to use interface to define data shapes, for example, an object. Below are some of the features that one might have but not the other
 * Interface:
     * declaration merging
     * extends & implements
@@ -298,7 +307,6 @@ What's the difference?
     * tuple
     * intersection
     * union
-
 
 ## Installation
 * node.js
@@ -313,12 +321,12 @@ npm install typescript
 ```shell
 tsc [-w] file.ts
 ```
-This will give you a JavaScript file `file.js` and then you can either run it with `node file.js` or include it in a `HTML` page using a script tag.
+This will give you a JavaScript file `file.js` and then you can either run it with `node file.js` or include it in a `HTML` page using a script tag
 ```html
 <script src="script.js"></script>
 ```
 
-`tsconfig.json` is a config file that can allow you to specify complier options for example turning on the strict mode.
+`tsconfig.json` is a config file that can allow you to specify complier options for example turning on the strict mode
 ```json
 {
     "compilerOptions": {
@@ -326,3 +334,6 @@ This will give you a JavaScript file `file.js` and then you can either run it wi
     }
 }
 ```
+
+## Resources
+[**The TypeScript Handbook**](https://www.typescriptlang.org/docs/handbook/intro.html)
