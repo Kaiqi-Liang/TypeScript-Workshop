@@ -259,14 +259,15 @@ type and = Bit & Hex;
 
 Differences between `Type Alias` and `Interface`
 ```typescript
-type Type<T> = {
-    name: T;
-    method: (arg: T) => T;
+type Type = {
+    name: string;
+    method: () => {};
 }
-
-interface Interface<T> {
-    name: T;
-    method: (arg: T) => T;
+```
+```typescript
+interface Interface {
+    name: string;
+    method: () => {};
 }
 ```
 What's the difference?
