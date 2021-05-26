@@ -17,6 +17,15 @@ This will give you a JavaScript file `file.js` and then you can either run it wi
 <script src="script.js"></script>
 ```
 
+`tsconfig.json` is a config file that allows you to specify complier options for example turning the strict mode on
+```json
+{
+    "compilerOptions": {
+        "strict": true
+    }
+}
+```
+
 ## JavaScript Concepts
 JavaScript is a dynamically typed language
 
@@ -349,8 +358,7 @@ class LinkedList {
         this.next = null;
         this.value = value;
     }
-    public head() { return this.value; }
-    public add(value: number) {
+    public append(value: number) {
         let curr: LinkedList = this;
         while (curr.next) curr = curr.next;
         curr.next = new LinkedList(value);
@@ -364,10 +372,9 @@ class LinkedList {
     }
 }
 const linkedList = new LinkedList();
-console.log(linkedList.head()); // 0
-linkedList.add(1);
-// linkedList.add(''); // error
-linkedList.display();
+linkedList.append(1);
+// linkedList.append(''); // error
+linkedList.display(); // 0 1
 // console.log(linkedList.value); // error
 ```
 
@@ -377,8 +384,7 @@ type Next<T extends Data> = LinkedList<T> | null;
 class LinkedList<T extends Data> {
     protected next: Next<T> = null;
     constructor(private value: T) {}
-    head() { return this.value; }
-    add(value: T) {
+    append(value: T) {
         let curr: LinkedList<T> = this;
         while (curr.next) curr = curr.next;
         curr.next = new LinkedList(value);
@@ -394,9 +400,8 @@ class LinkedList<T extends Data> {
 const linkedList = new LinkedList<string>('a');
 // const linkedList = new LinkedList(0); // no error
 // const linkedList = new LinkedList(true); // error
-console.log(linkedList.head()); // a
-linkedList.add('b');
-// linkedList.add(0); // error
+linkedList.append('b');
+// linkedList.append(0); // error
 linkedList.display(); // a b
 ```
 

@@ -278,8 +278,7 @@ type Next<T extends Data> = LinkedList<T> | null;
 class LinkedList<T extends Data> {
     protected next: Next<T> = null;
     constructor(private value: T) {}
-    head() { return this.value; }
-    add(value: T) {
+    append(value: T) {
         let curr: LinkedList<T> = this;
         while (curr.next) curr = curr.next;
         curr.next = new LinkedList(value);
@@ -295,7 +294,6 @@ class LinkedList<T extends Data> {
 const linkedList = new LinkedList<string>('a');
 // const linkedList = new LinkedList(0); // no error
 // const linkedList = new LinkedList(true); // error
-console.log(linkedList.head()); // a
-linkedList.add('b');
-// linkedList.add(0); // error
+linkedList.append('b');
+// linkedList.append(0); // error
 linkedList.display(); // a b

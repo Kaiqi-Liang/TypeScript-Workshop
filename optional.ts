@@ -9,5 +9,6 @@ class Optional<T> {
   }
 }
 
-const option = new Optional();
-console.log(option);
+console.log(new Optional()); // { value: null }
+console.log(new Optional(1)); // { value: 1 }
+console.log(new Optional('')); // { value: '' }
